@@ -1,0 +1,29 @@
+name: Git Clone
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 每月1号的14:30分开始执行（北京时间+8）
+    - cron: "30 14 1 * *"
+  # push:
+  #   branches: [main]
+
+jobs:
+  clone_and_push:
+    name: Git Clone and Push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        run: mkdir -p ./workspace
+      - name: lazyvim
+        run: |
+          git clone https://github.com/LazyVim/LazyVim.git lazyvim
+          cd lazyvim
+          git push -f https://clonegege:${{ secrets.GITEE_TOKEN }}@gitee.com/clonegege/lazyvim
+          cd ..
+      - name: lazy.nvim
+        run: |
+          git clone https://github.com/folke/lazy.nvim.git lazynvim
+          cd lazynvim
+          git push -f https://clonegege:${{ secrets.GITEE_TOKEN }}@gitee.com/clonegege/lazy.nvim
+          cd ..
